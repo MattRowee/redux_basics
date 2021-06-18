@@ -1,6 +1,8 @@
 import { Component } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
+
+import { counterActions } from '../store/index';
 import classes from "./Counter.module.css";
 
 const Counter = () => {
@@ -8,22 +10,26 @@ const Counter = () => {
   const dispatch = useDispatch();
   // useSelector gives us a part of state from our redux store instead of the whole thing (useStore)
   // changes to the counter will cause this component to automatically update
-  const counter = useSelector((state) => state.counter);
-  const show = useSelector((state) => state.showCounter);
+  const counter = useSelector((state) => state.counter.showCounter);
+  const show = useSelector((state) => state.counter.showCounter);
 
   const incrementHandler = () => {
-    dispatch({ type: 'increment' });
+    dispatch(counterActions.increment());
   };
+  //Q)how does the action object know to grab the argument for the action.amount in the store?
+  //A) we must change action.amount to action.payload
+  //it is stored in the action object in an extra field named payload { type IDENTIFIER payload: XXX }
+
   // value must have same name as value in the reducer
   const increaseHandler = () => {
-    dispatch({ type: "increase", amount: 666 });
+    dispatch( counterActions.increase(10));
   };
   const decrementHandler = () => {
-    dispatch({ type: "decrement" });
+    dispatch(counterActions.decrement());
   };
 
   const toggleCounterHandler = () => {
-    dispatch({ type: "toggle" });
+    dispatch(counterActions.toggleCounter());
   };
 
   return (
@@ -41,50 +47,3 @@ const Counter = () => {
 };
 
 export default Counter;
-// class Counter extends Component {
-//   incrementHandler() {
-//     this.props.increment();
-//   }
-
-//   decrementHandler() {
-//     this.props.decrement();
-//   }
-
-//   toggleCounterHandler() {
-
-//   };
-
-//   render() {
-//     return (
-//       <main className={classes.counter}>
-//         <h1>Redux Counter</h1>
-//         <div className={classes.value}>{this.props.counter}</div>
-//         <div>
-//           <button onClick={this.incrementHandler.bind(this)}>Increment</button>
-//           <button onClick={this.decrementHandler.bind(this)}>Decrement</button>
-//         </div>
-//         <button onClick={this.toggleCounterHandler}>Toggle Counter</button>
-//       </main>
-//     );
-//   }
-// }
-// //passing Counter to the function our connect function returns
-// //connect takes two functions for arguments. One maps redux state to props
-// const mapStateToProps = (state) => {
-//   return {
-//     counter: state.counter,
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     //keys are prop names to use in component
-//     // values are functions
-//     increment: () => dispatch({ type: "increment" }),
-//     decrement: () => dispatch({ type: "decrement" }),
-
-//   };
-// };
-// // 2nd function is the equivalent to dispatch.
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Counter);

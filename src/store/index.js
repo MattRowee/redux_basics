@@ -1,37 +1,58 @@
-import { createStore } from "redux";
+import { findRenderedComponentWithType } from "react-dom/test-utils";
+import { createSlice, configureStore } from "@reduxjs/toolkit";
 
-const initialState = { counter: 0, showCounter: true }
+const initialCounterState = { counter: 0, showCounter: true };
 
-const counterReducer = (state = initialState, action) => {
-  if (action.type === 'increment') {
-    return {
-      counter: state.counter + 1,
-      showCounter: state.showCounter
-    };
-  }
+const counterSlice = createSlice({
+  //every slice needs a name, can be any you want
+  name: "counter",
+  //next we set an initialState, if our const is the same name,
+  // we dont need a colon and value
+  initialState: initialCounterState,
+  // an object or map of all the reducers this state slice needs
+  //add methods with any name of your choice
+  // redux will translate to immutable code
+  reducers: {
+    increment(state) {
+      state.counter++;
+    },
+    decrement(state) {
+      state.counter--;
+    },
+    //if we need some data thats attached to the action,
+    // we can still accept it as a parameter and use it in the method
+    increase(state, action) {
+      state.counter = state.counter + action.payload;
+    },
+    toggleCounter(state) {
+      state.showCounter = !state.showCounter;
+    },
+  },
+});
 
-  if (action.type === "increase") {
-    return {
-      counter: state.counter + action.amount,
-      showCounter: state.showCounter
-    };
-  }
-
-  if (action.type === "decrement") {
-    return {
-      counter: state.counter - 1,
-      showCounter: state.showCounter
-    };
-  }
-  if (action.type === "toggle") {
-    return {
-     showCounter: !state.showCounter,
-     counter: state.counter
-    };
-  }
-  return state;
+const initialAuthState = {
+  isAuthenticated: false,
 };
 
-const store = createStore(counterReducer);
+createSlice({
+  name: "auth",
+  initialState: initialAuthState,
+  reducers: {
+    login(state) {
+      state.isAuthenticated = true;
+    },
+    logout(state) {
+      state.isAuthenticated = false;
+    },
+  },
+});
 
+//pass configureStore a configuration object where we set a reducer property
+//we can also create a map of reducers
+const store = configureStore({
+  reducer: { counter: counterSlice.reducer, auth: authSlice.reudcer },
+});
+
+export const counterActions = counterSlice.actions;
+export const authActions = authSlice.actions;
 export default store;
