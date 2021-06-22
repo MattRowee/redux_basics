@@ -1,6 +1,7 @@
 import { findRenderedComponentWithType } from "react-dom/test-utils";
 import { createSlice, configureStore } from "@reduxjs/toolkit";
 
+
 const initialCounterState = { counter: 0, showCounter: true };
 
 const counterSlice = createSlice({
@@ -34,7 +35,7 @@ const initialAuthState = {
   isAuthenticated: false,
 };
 
-createSlice({
+const authSlice = createSlice({
   name: "auth",
   initialState: initialAuthState,
   reducers: {
@@ -50,7 +51,7 @@ createSlice({
 //pass configureStore a configuration object where we set a reducer property
 //we can also create a map of reducers
 const store = configureStore({
-  reducer: { counter: counterSlice.reducer, auth: authSlice.reudcer },
+  reducer: { counter: counterSlice.reducer, auth: authSlice.reducer },
 });
 
 export const counterActions = counterSlice.actions;

@@ -10,7 +10,7 @@ const Counter = () => {
   const dispatch = useDispatch();
   // useSelector gives us a part of state from our redux store instead of the whole thing (useStore)
   // changes to the counter will cause this component to automatically update
-  const counter = useSelector((state) => state.counter.showCounter);
+  const counter = useSelector((state) => state.counter.counter);
   const show = useSelector((state) => state.counter.showCounter);
 
   const incrementHandler = () => {
@@ -22,7 +22,7 @@ const Counter = () => {
 
   // value must have same name as value in the reducer
   const increaseHandler = () => {
-    dispatch( counterActions.increase(10));
+    dispatch( counterActions.increase(666));
   };
   const decrementHandler = () => {
     dispatch(counterActions.decrement());
